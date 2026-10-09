@@ -1,0 +1,25 @@
+# Dependency and build artifacts
+node_modules
+.next
+.git
+.github
+.turbo
+
+# Test directories and test artifacts
+tests
+coverage
+playwright-report
+test-results
+*.tsbuildinfo
+
+# Environment secrets and local configs
+.env.local
+.env.*.local
+*.log
+npm-debug.log*
+
+# IDE and OS metadata
+.vscode
+.idea
+.DS_Store
+Thumbs.db

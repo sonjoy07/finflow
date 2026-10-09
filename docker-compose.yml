@@ -1,0 +1,31 @@
+version: '3.8'
+
+services:
+  finflow:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: finflow:latest
+    container_name: finflow-app
+    ports:
+      - "${HOST_PORT:-3005}:3000"
+    environment:
+      - NODE_ENV=production
+      - PORT=3000
+      - HOSTNAME=0.0.0.0
+      - NEXT_PUBLIC_APP_NAME=FinFlow
+      - NEXT_PUBLIC_APP_ENV=production
+      - NEXT_PUBLIC_APP_URL=${NEXT_PUBLIC_APP_URL:-http://localhost:3005}
+      - NEXT_PUBLIC_USE_MOCK_DATA=true
+      - MOCK_DATA_SEED=42
+      - MOCK_API_DELAY_MS=250
+      - AUTH_SECRET=portfolio-demo-session-secret-at-least-32-chars
+      - NEXT_PUBLIC_DEFAULT_ROLE=admin
+      - NEXT_PUBLIC_ENABLE_WEB_VITALS=true
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:3000/api/dashboard"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
