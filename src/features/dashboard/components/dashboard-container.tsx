@@ -8,6 +8,7 @@ import type { TimeRange } from '../types/dashboard.types';
 import { DashboardMetricsGrid } from './dashboard-metrics-grid';
 import { RecentTransactionsTable } from './recent-transactions-table';
 import { RecentActivityList } from './recent-activity-list';
+import { TriageIncidentSummary } from './triage-incident-summary';
 import { DashboardSkeleton } from './dashboard-skeleton';
 import { ErrorState } from '@/components/feedback/error-state';
 import { EmptyState } from '@/components/feedback/empty-state';
@@ -138,25 +139,21 @@ export function DashboardContainer() {
       {/* Loaded Dashboard Content */}
       {!isLoading && !isError && data && (
         <div className="space-y-6">
-          {/* KPI Metrics */}
+          {/* Unified Treasury Summary Strip */}
           <DashboardMetricsGrid summary={data.summary} />
 
-          {/* Analytics Charts */}
-          <div className="grid gap-6 lg:grid-cols-7">
-            <div className="lg:col-span-4">
+          {/* Asymmetrical Operations Desk (68% Primary Stage / 32% Triage Rail) */}
+          <div className="grid gap-6 lg:grid-cols-12 items-start">
+            {/* Primary Stage (68% - lg:col-span-8) */}
+            <div className="lg:col-span-8 space-y-6">
               <VolumeTrendChart data={data.volumeOverTime} />
-            </div>
-            <div className="lg:col-span-3">
-              <StatusDistributionChart data={data.statusDistribution} />
-            </div>
-          </div>
-
-          {/* Operational Feeds (Recent Transactions & Activity) */}
-          <div className="grid gap-6 lg:grid-cols-7">
-            <div className="lg:col-span-4">
               <RecentTransactionsTable transactions={data.recentTransactions} />
             </div>
-            <div className="lg:col-span-3">
+
+            {/* Triage Command Rail (32% - lg:col-span-4) */}
+            <div className="lg:col-span-4 space-y-6">
+              <TriageIncidentSummary summary={data.summary} />
+              <StatusDistributionChart data={data.statusDistribution} />
               <RecentActivityList activities={data.recentActivity} />
             </div>
           </div>

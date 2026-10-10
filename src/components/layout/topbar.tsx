@@ -1,7 +1,8 @@
 'use client';
 
 import * as React from 'react';
-import { Menu, Bell, Shield } from 'lucide-react';
+import Link from 'next/link';
+import { Menu, Bell, Shield, Search } from 'lucide-react';
 import { useUIStore } from '@/stores/ui-store';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -45,10 +46,19 @@ export function Topbar() {
               <span className="h-2 w-2 rounded-full bg-emerald-500 animate-pulse" aria-hidden="true" />
               <span>MOCK GATEWAYS ACTIVE</span>
             </Badge>
-            <span className="text-xs text-muted-foreground hidden lg:inline">
-              Deterministic Seed #42
-            </span>
           </div>
+
+          {/* Quick Omnibar Jump (Linear/Stripe style) */}
+          <Link
+            href="/transactions"
+            className="hidden lg:flex items-center gap-2.5 px-3 py-1.5 rounded-lg border border-border/80 bg-muted/20 text-xs text-muted-foreground hover:text-foreground hover:bg-muted/40 transition-colors"
+          >
+            <Search className="h-3.5 w-3.5" aria-hidden="true" />
+            <span className="font-sans">Search transactions, rails, or batches...</span>
+            <kbd className="ml-2 font-mono text-[10px] bg-card px-1.5 py-0.5 rounded border border-border/70 text-foreground font-semibold">
+              /
+            </kbd>
+          </Link>
         </div>
 
         <div className="flex items-center gap-2 sm:gap-3">

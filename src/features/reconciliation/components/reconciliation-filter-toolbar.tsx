@@ -65,7 +65,7 @@ export function ReconciliationFilterToolbar({
   );
 
   return (
-    <div className="space-y-3 bg-card p-4 rounded-xl border border-border shadow-xs">
+    <div className="space-y-3 bg-card p-4 rounded-2xl border border-border/80 shadow-[0_1px_3px_rgba(0,0,0,0.02)]">
       {/* Top Row: Search & Status Filter Controls */}
       <div className="flex flex-col md:flex-row items-stretch md:items-center justify-between gap-3">
         {/* Search Input */}

@@ -90,7 +90,7 @@ export function WorkflowList({
   return (
     <div className="space-y-4">
       {/* Search & Filter Toolbar */}
-      <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 p-3 bg-card border border-border rounded-lg shadow-sm">
+      <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 p-3 bg-card border border-border/80 rounded-2xl shadow-[0_1px_3px_rgba(0,0,0,0.02)]">
         <div className="relative flex-1 max-w-md">
           <Search className="absolute left-3 top-2.5 h-4 w-4 text-muted-foreground" aria-hidden="true" />
           <Input
@@ -165,7 +165,7 @@ export function WorkflowList({
               <Card
                 key={workflow.id}
                 className={cn(
-                  'transition-all duration-200 hover:shadow-xs border border-border bg-card',
+                  'rounded-2xl transition-all duration-200 border border-border/80 bg-card shadow-[0_1px_3px_rgba(0,0,0,0.02)] overflow-hidden',
                   workflow.status !== 'active' && 'opacity-85 bg-card/60'
                 )}
               >

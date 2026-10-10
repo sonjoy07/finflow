@@ -1,6 +1,4 @@
 import * as React from 'react';
-import { CheckCircle2, AlertTriangle, ArrowUpDown, ShieldCheck, Scale, Banknote } from 'lucide-react';
-import { Card, CardContent } from '@/components/ui/card';
 import { formatCurrency } from '@/lib/formatters';
 import type { ReconciliationSummary } from '../types/reconciliation.types';
 
@@ -15,10 +13,16 @@ export function ReconciliationMetricsCards({
 }: ReconciliationMetricsCardsProps) {
   if (isLoading || !summary) {
     return (
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        {[1, 2, 3, 4].map((i) => (
-          <div key={i} className="h-28 rounded-xl border border-border bg-card/60 p-4 animate-pulse" />
-        ))}
+      <div className="rounded-2xl border border-border/80 bg-card/60 p-6 animate-pulse">
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-6">
+          {[1, 2, 3, 4].map((i) => (
+            <div key={i} className="space-y-2">
+              <div className="h-3 w-28 bg-muted rounded" />
+              <div className="h-7 w-36 bg-muted rounded" />
+              <div className="h-3 w-24 bg-muted rounded" />
+            </div>
+          ))}
+        </div>
       </div>
     );
   }
@@ -30,98 +34,88 @@ export function ReconciliationMetricsCards({
     summary.missingInternalCount;
 
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-      {/* Match Rate Card */}
-      <Card className="border-border shadow-xs">
-        <CardContent className="p-4 flex items-center justify-between">
-          <div className="space-y-1">
-            <span className="text-[11px] font-medium text-muted-foreground uppercase tracking-wider">
+    <div className="rounded-2xl border border-border/80 bg-card shadow-[0_1px_3px_rgba(0,0,0,0.02)] overflow-hidden">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 divide-y sm:divide-y-0 sm:divide-x divide-border/60">
+        {/* 1. Settlement Match Rate */}
+        <div className="p-5 sm:p-6 flex flex-col justify-between gap-1.5 hover:bg-muted/10 transition-colors">
+          <div className="flex items-center justify-between">
+            <span className="text-[11px] font-semibold text-muted-foreground uppercase tracking-wider">
               Settlement Match Rate
             </span>
-            <div className="flex items-baseline gap-2">
-              <span className="text-2xl font-bold font-mono tracking-tight text-foreground">
-                {summary.matchRatePercentage}%
-              </span>
-              <span className="text-xs text-muted-foreground font-medium">
-                ({summary.matchedCount}/{summary.totalRecords})
-              </span>
-            </div>
-            <p className="text-[11px] text-muted-foreground">
-              Automated clearing parity
-            </p>
+            <span className="h-2 w-2 rounded-full bg-emerald-500 animate-pulse" aria-hidden="true" />
           </div>
-          <div className="h-10 w-10 rounded-xl bg-emerald-500/10 flex items-center justify-center text-emerald-600 dark:text-emerald-400">
-            <CheckCircle2 className="h-5 w-5" aria-hidden="true" />
+          <div className="flex items-baseline gap-2">
+            <span className="text-2xl sm:text-3xl font-semibold font-mono tracking-tight text-foreground">
+              {summary.matchRatePercentage}%
+            </span>
+            <span className="text-[11px] font-mono text-muted-foreground">
+              ({summary.matchedCount}/{summary.totalRecords})
+            </span>
           </div>
-        </CardContent>
-      </Card>
+          <span className="text-[11px] text-muted-foreground">
+            Automated clearing parity
+          </span>
+        </div>
 
-      {/* Net Settled Capital */}
-      <Card className="border-border shadow-xs">
-        <CardContent className="p-4 flex items-center justify-between">
-          <div className="space-y-1">
-            <span className="text-[11px] font-medium text-muted-foreground uppercase tracking-wider">
+        {/* 2. Net Capital Settled */}
+        <div className="p-5 sm:p-6 flex flex-col justify-between gap-1.5 hover:bg-muted/10 transition-colors">
+          <div className="flex items-center justify-between">
+            <span className="text-[11px] font-semibold text-muted-foreground uppercase tracking-wider">
               Net Capital Settled
             </span>
-            <div className="flex items-baseline gap-2">
-              <span className="text-2xl font-bold font-mono tracking-tight text-foreground">
-                {formatCurrency(summary.netSettledTotalCents, 'USD')}
-              </span>
-            </div>
-            <p className="text-[11px] text-muted-foreground">
-              Gross minus banking clearing fees
-            </p>
+            <span className="font-mono text-[10px] text-muted-foreground">USD Net</span>
           </div>
-          <div className="h-10 w-10 rounded-xl bg-primary/10 flex items-center justify-center text-primary">
-            <Banknote className="h-5 w-5" aria-hidden="true" />
+          <div className="flex items-baseline gap-2">
+            <span className="text-2xl sm:text-3xl font-semibold font-mono tracking-tight text-foreground">
+              {formatCurrency(summary.netSettledTotalCents, 'USD')}
+            </span>
           </div>
-        </CardContent>
-      </Card>
+          <span className="text-[11px] text-muted-foreground">
+            Gross minus banking clearing fees
+          </span>
+        </div>
 
-      {/* Discrepancy Amount Delta */}
-      <Card className="border-border shadow-xs">
-        <CardContent className="p-4 flex items-center justify-between">
-          <div className="space-y-1">
-            <span className="text-[11px] font-medium text-muted-foreground uppercase tracking-wider">
+        {/* 3. Discrepancy Variance */}
+        <div className="p-5 sm:p-6 flex flex-col justify-between gap-1.5 hover:bg-muted/10 transition-colors">
+          <div className="flex items-center justify-between">
+            <span className="text-[11px] font-semibold text-rose-700 dark:text-rose-300 uppercase tracking-wider">
               Discrepancy Variance
             </span>
-            <div className="flex items-baseline gap-2">
-              <span className="text-2xl font-bold font-mono tracking-tight text-rose-600 dark:text-rose-400">
-                {formatCurrency(summary.discrepancyTotalCents, 'USD')}
-              </span>
-            </div>
-            <p className="text-[11px] text-rose-600/80 dark:text-rose-400/80 font-medium">
-              {activeIssuesCount} unresolved breaks
-            </p>
+            <span className="font-mono text-[10px] px-1.5 py-0.5 rounded bg-rose-500/10 text-rose-600 dark:text-rose-400 font-semibold">
+              {activeIssuesCount} breaks
+            </span>
           </div>
-          <div className="h-10 w-10 rounded-xl bg-rose-500/10 flex items-center justify-center text-rose-600 dark:text-rose-400">
-            <Scale className="h-5 w-5" aria-hidden="true" />
+          <div className="flex items-baseline gap-2">
+            <span className="text-2xl sm:text-3xl font-semibold font-mono tracking-tight text-rose-600 dark:text-rose-400">
+              {formatCurrency(summary.discrepancyTotalCents, 'USD')}
+            </span>
           </div>
-        </CardContent>
-      </Card>
+          <span className="text-[11px] text-rose-600/80 dark:text-rose-400/80 font-medium">
+            Requires dual-ledger audit
+          </span>
+        </div>
 
-      {/* Resolution Progress */}
-      <Card className="border-border shadow-xs">
-        <CardContent className="p-4 flex items-center justify-between">
-          <div className="space-y-1">
-            <span className="text-[11px] font-medium text-muted-foreground uppercase tracking-wider">
+        {/* 4. Audited Resolutions */}
+        <div className="p-5 sm:p-6 flex flex-col justify-between gap-1.5 hover:bg-muted/10 transition-colors">
+          <div className="flex items-center justify-between">
+            <span className="text-[11px] font-semibold text-muted-foreground uppercase tracking-wider">
               Audited Resolutions
             </span>
-            <div className="flex items-baseline gap-2">
-              <span className="text-2xl font-bold font-mono tracking-tight text-foreground">
-                {summary.resolvedCount}
-              </span>
-              <span className="text-xs text-muted-foreground font-medium">resolved</span>
-            </div>
-            <p className="text-[11px] text-muted-foreground">
-              Manually cleared by operations
-            </p>
+            <span className="font-mono text-[10px] text-emerald-600 dark:text-emerald-400 font-semibold">
+              Verified
+            </span>
           </div>
-          <div className="h-10 w-10 rounded-xl bg-blue-500/10 flex items-center justify-center text-blue-600 dark:text-blue-400">
-            <ShieldCheck className="h-5 w-5" aria-hidden="true" />
+          <div className="flex items-baseline gap-2">
+            <span className="text-2xl sm:text-3xl font-semibold font-mono tracking-tight text-foreground">
+              {summary.resolvedCount}
+            </span>
+            <span className="text-xs font-mono text-muted-foreground">reconciled</span>
           </div>
-        </CardContent>
-      </Card>
+          <span className="text-[11px] text-muted-foreground">
+            Manually cleared by operations
+          </span>
+        </div>
+      </div>
     </div>
   );
 }

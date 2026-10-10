@@ -286,7 +286,7 @@ export function TransactionTable({
   });
 
   return (
-    <div className="rounded-xl border border-border bg-card shadow-xs overflow-hidden">
+    <div className="rounded-2xl border border-border/80 bg-card shadow-[0_1px_3px_rgba(0,0,0,0.02)] overflow-hidden">
       <div className="overflow-x-auto">
         <table className="w-full text-left text-xs border-collapse">
           <caption className="sr-only">
@@ -296,7 +296,7 @@ export function TransactionTable({
             {table.getHeaderGroups().map((headerGroup) => (
               <tr
                 key={headerGroup.id}
-                className="border-b border-border/80 bg-muted/40 text-muted-foreground font-semibold"
+                className="border-b border-border/70 bg-muted/25 text-muted-foreground font-mono text-[10px] uppercase tracking-wider"
               >
                 {headerGroup.headers.map((header) => {
                   let ariaSort: 'ascending' | 'descending' | 'none' = 'none';

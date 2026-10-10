@@ -99,14 +99,14 @@ export function ReconciliationTable({
   }
 
   return (
-    <div className="rounded-xl border border-border bg-card shadow-xs overflow-hidden">
+    <div className="rounded-2xl border border-border/80 bg-card shadow-[0_1px_3px_rgba(0,0,0,0.02)] overflow-hidden">
       <div className="overflow-x-auto">
         <table className="w-full text-left text-xs border-collapse">
           <caption className="sr-only">
             FinFlow Payment Reconciliation Ledger contrasting internal application ledger transactions with clearing provider settlement batches.
           </caption>
           <thead>
-            <tr className="border-b border-border/80 bg-muted/40 text-muted-foreground font-semibold">
+            <tr className="border-b border-border/70 bg-muted/25 text-muted-foreground font-mono text-[10px] uppercase tracking-wider">
               <th scope="col" className="px-4 py-3 select-none">
                 Reconciliation ID / Batch
               </th>
