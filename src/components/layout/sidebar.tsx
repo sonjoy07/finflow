@@ -58,14 +58,14 @@ export function Sidebar() {
             isSidebarCollapsed && 'justify-center w-full'
           )}
         >
-          <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-primary text-primary-foreground shadow-sm shrink-0">
-            <Activity className="h-5 w-5" aria-hidden="true" />
+          <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary text-primary-foreground font-mono font-bold text-xs tracking-tighter shadow-xs shrink-0">
+            FF
           </div>
           {!isSidebarCollapsed && (
             <div className="flex flex-col">
-              <span className="text-base font-extrabold tracking-tight leading-none">FinFlow</span>
-              <span className="text-[10px] text-muted-foreground font-mono uppercase tracking-widest mt-0.5">
-                PayOps Platform
+              <span className="text-sm font-bold tracking-tight leading-none text-foreground">FinFlow</span>
+              <span className="text-[9px] text-muted-foreground font-mono uppercase tracking-widest mt-0.5">
+                PayOps Console
               </span>
             </div>
           )}

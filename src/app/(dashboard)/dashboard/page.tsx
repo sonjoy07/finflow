@@ -15,11 +15,12 @@ export default function DashboardPage() {
     <div className="space-y-6">
       {/* Static Server Component Header */}
       <PageHeader
-        title="Executive Operations Dashboard"
+        title="Operations Command Center"
         description="Real-time multi-rail payment analytics, authorization health, failure diagnosis, and settlement reconciliation."
         badge={
-          <Badge variant="success" showDot className="font-mono text-[11px]">
-            SYSTEM HEALTHY (96.8%)
+          <Badge variant="outline" className="font-mono text-[11px] gap-1.5 py-0.5 border-emerald-500/30 text-emerald-700 dark:text-emerald-300 bg-emerald-500/10">
+            <span className="h-1.5 w-1.5 rounded-full bg-emerald-500 animate-pulse" aria-hidden="true" />
+            <span>SETTLEMENT HEALTHY (96.8%)</span>
           </Badge>
         }
         breadcrumbs={[

@@ -41,15 +41,15 @@ function getStatusBadge(status: string) {
 
 export function RecentTransactionsTable({ transactions }: RecentTransactionsTableProps) {
   return (
-    <Card className="flex flex-col">
-      <CardHeader className="flex flex-row items-center justify-between pb-3">
+    <Card className="flex flex-col rounded-2xl border border-border/80 bg-card shadow-[0_1px_3px_rgba(0,0,0,0.02)] overflow-hidden">
+      <CardHeader className="flex flex-row items-center justify-between p-5 pb-4 border-b border-border/50">
         <div className="space-y-1">
-          <CardTitle className="text-base font-semibold">Recent Transactions</CardTitle>
-          <CardDescription>Latest processed payment attempts across all gateways.</CardDescription>
+          <CardTitle className="text-sm font-semibold tracking-tight text-foreground">Recent Transactions</CardTitle>
+          <CardDescription className="text-xs text-muted-foreground">Latest cleared payments across connected gateways.</CardDescription>
         </div>
         <Link href="/transactions">
-          <Button variant="ghost" size="sm" className="gap-1.5 text-xs text-primary">
-            <span>View All</span>
+          <Button variant="ghost" size="sm" className="gap-1 text-xs text-primary font-medium hover:bg-primary/5">
+            <span>Ledger View</span>
             <ArrowRight className="h-3.5 w-3.5" aria-hidden="true" />
           </Button>
         </Link>
@@ -60,7 +60,7 @@ export function RecentTransactionsTable({ transactions }: RecentTransactionsTabl
           <table className="w-full text-left text-xs border-collapse">
             <caption className="sr-only">Recent Transactions Table</caption>
             <thead>
-              <tr className="border-b border-border/60 bg-muted/30 text-muted-foreground font-semibold">
+              <tr className="border-b border-border/60 bg-muted/20 text-muted-foreground font-mono text-[10px] uppercase tracking-wider">
                 <th scope="col" className="px-4 py-2.5">Transaction ID</th>
                 <th scope="col" className="px-4 py-2.5">Customer</th>
                 <th scope="col" className="px-4 py-2.5 text-right">Amount</th>
@@ -68,7 +68,7 @@ export function RecentTransactionsTable({ transactions }: RecentTransactionsTabl
                 <th scope="col" className="px-4 py-2.5">Timestamp</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-border/40">
+            <tbody className="divide-y divide-border/40 font-sans">
               {transactions.map((txn) => (
                 <tr key={txn.id} className="hover:bg-muted/40 transition-colors">
                   <td className="px-4 py-3 font-mono font-medium text-foreground">

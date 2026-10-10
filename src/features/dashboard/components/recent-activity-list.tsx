@@ -26,22 +26,22 @@ function getActivityIcon(action: string) {
 
 export function RecentActivityList({ activities }: RecentActivityListProps) {
   return (
-    <Card className="flex flex-col">
-      <CardHeader className="flex flex-row items-center justify-between pb-3">
+    <Card className="flex flex-col rounded-2xl border border-border/80 bg-card shadow-[0_1px_3px_rgba(0,0,0,0.02)] overflow-hidden">
+      <CardHeader className="flex flex-row items-center justify-between p-5 pb-4 border-b border-border/50">
         <div className="space-y-1">
-          <CardTitle className="text-base font-semibold">Operational Activity</CardTitle>
-          <CardDescription>Audit trail of operator interventions & automated rules.</CardDescription>
+          <CardTitle className="text-sm font-semibold tracking-tight text-foreground">Operational Audit</CardTitle>
+          <CardDescription className="text-xs text-muted-foreground">Immutable trail of operator overrides &amp; rule actions.</CardDescription>
         </div>
         <Link href="/activity">
-          <Button variant="ghost" size="sm" className="gap-1.5 text-xs text-primary">
+          <Button variant="ghost" size="sm" className="gap-1 text-xs text-primary font-medium hover:bg-primary/5">
             <span>Audit Log</span>
             <ArrowRight className="h-3.5 w-3.5" aria-hidden="true" />
           </Button>
         </Link>
       </CardHeader>
 
-      <CardContent className="flex-1 p-4 pt-1">
-        <ul className="space-y-3" role="list" aria-label="System activity timeline">
+      <CardContent className="flex-1 p-4 pt-3">
+        <ul className="space-y-2.5" role="list" aria-label="System activity timeline">
           {activities.map((activity) => (
             <li
               key={activity.id}

@@ -65,15 +65,15 @@ export function VolumeTrendChart({ data }: VolumeTrendChartProps) {
   const chartColors = useResolvedChartColors();
 
   return (
-    <Card className="flex flex-col">
-      <CardHeader>
+    <Card className="flex flex-col rounded-2xl border border-border/80 bg-card shadow-[0_1px_3px_rgba(0,0,0,0.02)] overflow-hidden">
+      <CardHeader className="p-5 pb-3 border-b border-border/50">
         <div className="flex items-center justify-between">
-          <CardTitle className="text-base font-semibold">Transaction Volume Trend</CardTitle>
-          <span className="text-[11px] font-mono text-muted-foreground">USD (Minor units / 100)</span>
+          <CardTitle className="text-sm font-semibold tracking-tight text-foreground">Transaction Volume Trend</CardTitle>
+          <span className="text-[10px] font-mono uppercase tracking-wider text-muted-foreground">USD Clearing</span>
         </div>
-        <CardDescription>Daily gross volume distribution across settlement statuses.</CardDescription>
+        <CardDescription className="text-xs text-muted-foreground">Daily gross volume distribution across settlement statuses.</CardDescription>
       </CardHeader>
-      <CardContent className="flex-1 pb-4">
+      <CardContent className="flex-1 p-5 pt-4">
         <div className="h-[280px] w-full" aria-label="Transaction Volume Area Chart">
           <ResponsiveContainer width="100%" height="100%">
             <AreaChart data={chartData} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>

@@ -65,14 +65,13 @@ export function DashboardContainer() {
   return (
     <div className="space-y-6">
       {/* Filter Toolbar / Controls */}
-      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 bg-card/60 p-3 rounded-xl border border-border/40 backdrop-blur-xs">
-        <div className="flex items-center gap-2">
-          <Calendar className="h-4 w-4 text-primary shrink-0" aria-hidden="true" />
-          <span className="text-xs font-semibold text-foreground">Time Horizon:</span>
+      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 bg-card p-3 rounded-2xl border border-border/70 shadow-[0_1px_3px_rgba(0,0,0,0.02)]">
+        <div className="flex items-center gap-3">
+          <span className="text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">Horizon</span>
           <div
             role="group"
             aria-label="Filter by time horizon"
-            className="inline-flex rounded-lg border border-border bg-muted/40 p-0.5"
+            className="inline-flex rounded-xl border border-border/80 bg-muted/30 p-1"
           >
             {TIME_RANGES.map((range) => {
               const isSelected = timeRange === range.value;
@@ -83,9 +82,9 @@ export function DashboardContainer() {
                   onClick={() => setTimeRange(range.value)}
                   aria-pressed={isSelected}
                   className={cn(
-                    'rounded-md px-2.5 py-1 text-xs font-medium transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary',
+                    'rounded-lg px-3 py-1 text-xs font-medium transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary',
                     isSelected
-                      ? 'bg-card text-foreground shadow-xs font-semibold'
+                      ? 'bg-card text-foreground shadow-xs font-semibold border border-border/40'
                       : 'text-muted-foreground hover:text-foreground'
                   )}
                 >
@@ -102,14 +101,14 @@ export function DashboardContainer() {
             size="sm"
             onClick={() => refetch()}
             disabled={isFetching}
-            className="h-8 gap-1.5 text-xs text-muted-foreground hover:text-foreground"
+            className="h-8 gap-1.5 text-xs rounded-lg border-border/80 text-muted-foreground hover:text-foreground hover:bg-muted/40"
             aria-label="Refresh operational metrics"
           >
             <RefreshCw
               className={cn('h-3.5 w-3.5', isFetching && 'animate-spin text-primary')}
               aria-hidden="true"
             />
-            <span>Refresh</span>
+            <span>Sync Rails</span>
           </Button>
         </div>
       </div>
