@@ -79,11 +79,11 @@ export function VolumeTrendChart({ data }: VolumeTrendChartProps) {
             <AreaChart data={chartData} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
               <defs>
                 <linearGradient id="settledGradient" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="5%" stopColor={chartColors.emerald} stopOpacity={0.4} />
+                  <stop offset="5%" stopColor={chartColors.emerald} stopOpacity={0.12} />
                   <stop offset="95%" stopColor={chartColors.emerald} stopOpacity={0.0} />
                 </linearGradient>
                 <linearGradient id="failedGradient" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="5%" stopColor={chartColors.rose} stopOpacity={0.4} />
+                  <stop offset="5%" stopColor={chartColors.rose} stopOpacity={0.12} />
                   <stop offset="95%" stopColor={chartColors.rose} stopOpacity={0.0} />
                 </linearGradient>
               </defs>

@@ -151,36 +151,37 @@ FinFlow avoids dramatic blur or multi-step drop shadows. Depth is communicated p
 ## 6. Responsive Dashboard Layout Architecture
 
 ```text
-+-----------------------------------------------------------------------------------+
-|  [Logo] FinFlow      [Search / Omnibar]              [Role Switcher]  [Avatar]    |  <- Topbar (64px)
-+------------------+----------------------------------------------------------------+
-|  📊 Dashboard    |  Page Title + Action Bar                                       |
-|  💳 Transactions |----------------------------------------------------------------|
-|  ⚖️ Reconcile    |  +------------+  +------------+  +------------+  +------------+|
-|  ⚡ Workflows    |  | Total Vol  |  | Success %  |  | Discrepancy|  | Auto-Retry ||  <- KPI Grid
-|  🔔 Alerts       |  +------------+  +------------+  +------------+  +------------+|
-|  📋 Audit Logs   |----------------------------------------------------------------|
-|                  |  Filter Toolbar: [Search] [Status v] [Date Range v] [Export]    |
-|  [Dark Mode]     |----------------------------------------------------------------|
-|  [Operator: Pro] |  Transaction Data Table (Compact, Sticky Header, Tabular-Nums) |  <- Data Table
-|  (256px Sidebar) |                                                                |
-+------------------+----------------------------------------------------------------+
++-------------------------------------------------------------------------------------------------------------------+
+| Topbar: FinFlow Logo | [Search Omnibar /] | [Mock Gateways Active]       [Role Switcher]  [Notifications] [Avatar]|
++------------------+------------------------------------------------------------------------------------------------+
+|  📊 Dashboard    | Operations Command Center                                          [Horizon: 24h | 7d | 30d]   |
+|  💳 Transactions |------------------------------------------------------------------------------------------------|
+|  ⚖️ Reconcile    | [ UNIFIED TREASURY SUMMARY STRIP: Total Volume $1.24M | Settled | Exceptions | Pending | Rate ]   |
+|  ⚡ Workflows    |------------------------------------------------------------------------------------------------|
+|  🔔 Alerts       | +-- PRIMARY STAGE (68%) -------------------------------+ +-- TRIAGE COMMAND RAIL (32%) -------+   |
+|  📋 Audit Logs   | | Processing Volume Velocity Trend (Daily Gross/Net)   | | Operational Exceptions & P1 Queue   |   |
+|                  | | Area chart with hairline gridlines & latency bounds  | | • Ledger Variance Break ($1,845)   |   |
+|  [Sidebar 256px] | |------------------------------------------------------| | • Decline Triage Queue (42 items)   |   |
+|  [Ops Lead Desk] | | Live Transaction Stream (Recent Cleared Events)      | | • Gateway Rails (Stripe/Adyen/ACH)  |   |
+|  [Collapse <]    | | High-density ledger table with inline actions        | | Status Distribution Donut           |   |
+|                  | | [Ledger View ->]                                     | | Operational Activity Feed           |   |
+|                  | +------------------------------------------------------+ +-------------------------------------+   |
++------------------+------------------------------------------------------------------------------------------------+
 ```
 
 ### Breakpoint Matrix
 - **Mobile (< 768px)**:
   - Sidebar collapses into an off-canvas drawer opened via hamburger button in topbar.
-  - Tables switch to horizontal overflow containers with sticky key identifier columns.
-  - KPI metric cards stack in a single 1-column layout.
+  - Multi-column ledger strips adapt to stacked priority views with horizontal overflow indicators.
+  - Asymmetric layout collapses cleanly into a single vertical stream (Primary metrics -> Exception queue -> Velocity chart -> Recent transactions).
 - **Tablet (768px – 1023px)**:
-  - Sidebar displays in condensed icon-only mode (64px width) or full collapsible view.
-  - KPI grid adapts to a 2x2 matrix.
-- **Desktop (1024px+)**:
-  - Full permanent 256px sidebar with organizational status indicator.
-  - Full-width data table showing all reconciliation metadata, hashes, and actions.
-  - 4-column KPI cards.
-- **Ultra-Wide (1536px+)**:
-  - Container capped at `max-w-7xl` or dynamic fluid grid preventing excessive line lengths.
+  - Sidebar displays in condensed icon-only mode (72px width) with accessible tooltips.
+  - Treasury strip splits into 2x2 grid; primary charts and tables span 100% width.
+- **Desktop (1024px – 1439px)**:
+  - Permanent 256px navigation sidebar with institutional operator desk status.
+  - Asymmetrical 68/32 split (8 cols / 4 cols) maximizing dual operational oversight.
+- **Wide Display (1440px+)**:
+  - Container fluidly expands up to `max-w-[1600px]`, eliminating dead whitespace margins while preserving optimal 65–75ch readability on text blocks.
 
 ---
 

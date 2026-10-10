@@ -36,7 +36,7 @@ export function TriageIncidentSummary({ summary }: TriageIncidentSummaryProps) {
         {hasDiscrepancy && (
           <div className="p-3.5 rounded-xl border border-rose-500/20 bg-rose-500/5 space-y-2">
             <div className="flex items-center justify-between">
-              <span className="text-[11px] font-semibold text-rose-700 dark:text-rose-300 uppercase tracking-wider flex items-center gap-1.5">
+              <span className="text-xs font-semibold text-rose-700 dark:text-rose-300 flex items-center gap-1.5">
                 <AlertTriangle className="h-3.5 w-3.5" aria-hidden="true" />
                 Ledger Variance Break
               </span>
@@ -66,7 +66,7 @@ export function TriageIncidentSummary({ summary }: TriageIncidentSummaryProps) {
         {hasFailures && (
           <div className="p-3.5 rounded-xl border border-amber-500/20 bg-amber-500/5 space-y-2">
             <div className="flex items-center justify-between">
-              <span className="text-[11px] font-semibold text-amber-700 dark:text-amber-300 uppercase tracking-wider">
+              <span className="text-xs font-semibold text-amber-700 dark:text-amber-300">
                 Decline Triage Queue
               </span>
               <span className="font-mono text-xs font-bold text-amber-600 dark:text-amber-400">
@@ -93,7 +93,7 @@ export function TriageIncidentSummary({ summary }: TriageIncidentSummaryProps) {
 
         {/* Live Multi-Rail Connectivity Status */}
         <div className="pt-2 border-t border-border/50 space-y-2">
-          <div className="flex items-center justify-between text-[11px] text-muted-foreground font-semibold uppercase tracking-wider">
+          <div className="flex items-center justify-between text-xs text-muted-foreground font-medium">
             <span>Gateway Rails</span>
             <span className="font-mono text-[10px]">P99 Latency</span>
           </div>

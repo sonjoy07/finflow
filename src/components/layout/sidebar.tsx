@@ -45,12 +45,12 @@ export function Sidebar() {
     <aside
       aria-label="Sidebar Navigation"
       className={cn(
-        'hidden md:flex flex-col border-r border-border bg-card transition-[width] duration-200 ease-in-out shrink-0 select-none z-30',
+        'hidden md:flex flex-col border-r border-border/70 bg-muted/20 dark:bg-muted/10 transition-[width] duration-200 ease-in-out shrink-0 select-none z-30',
         isSidebarCollapsed ? 'w-[72px]' : 'w-64'
       )}
     >
       {/* Brand Header */}
-      <div className="flex h-16 items-center justify-between px-4 border-b border-border/40">
+      <div className="flex h-16 items-center justify-between px-4 border-b border-border/60">
         <Link
           href="/dashboard"
           className={cn(
@@ -64,7 +64,7 @@ export function Sidebar() {
           {!isSidebarCollapsed && (
             <div className="flex flex-col">
               <span className="text-sm font-bold tracking-tight leading-none text-foreground">FinFlow</span>
-              <span className="text-[9px] text-muted-foreground font-mono uppercase tracking-widest mt-0.5">
+              <span className="text-[10px] text-muted-foreground font-mono mt-0.5">
                 PayOps Console
               </span>
             </div>
@@ -75,8 +75,8 @@ export function Sidebar() {
       {/* Main Navigation */}
       <nav role="navigation" className="flex-1 space-y-1.5 p-3 overflow-y-auto">
         {!isSidebarCollapsed && (
-          <div className="px-3 pb-2 pt-1 text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">
-            Operations Console
+          <div className="px-3 pb-2 pt-1 text-[11px] font-medium text-muted-foreground">
+            Platform
           </div>
         )}
 
@@ -92,11 +92,17 @@ export function Sidebar() {
               className={cn(
                 'flex items-center gap-3 rounded-lg px-3 py-2 text-xs font-medium transition-all group relative focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary',
                 isActive
-                  ? 'bg-primary/10 text-primary font-semibold shadow-xs'
-                  : 'text-muted-foreground hover:bg-muted/80 hover:text-foreground',
+                  ? 'bg-background text-foreground font-semibold shadow-xs border border-border/80'
+                  : 'text-muted-foreground hover:bg-muted/50 hover:text-foreground',
                 isSidebarCollapsed && 'justify-center px-2'
               )}
             >
+              {isActive && (
+                <span
+                  className="absolute left-1 top-2 bottom-2 w-1 rounded-full bg-primary"
+                  aria-hidden="true"
+                />
+              )}
               <Icon
                 className={cn(
                   'h-4 w-4 shrink-0 transition-colors',
@@ -108,17 +114,11 @@ export function Sidebar() {
                 <>
                   <span className="flex-1 truncate">{item.label}</span>
                   {item.badge && (
-                    <Badge variant="default" className="text-[10px] px-1.5 py-0 h-4">
+                    <Badge variant="outline" className="text-[10px] px-1.5 py-0 h-4 border-emerald-500/30 text-emerald-600 dark:text-emerald-400 bg-emerald-500/10 font-mono">
                       {item.badge}
                     </Badge>
                   )}
                 </>
-              )}
-              {isActive && isSidebarCollapsed && (
-                <span
-                  className="absolute left-0 top-2 bottom-2 w-1 rounded-r-full bg-primary"
-                  aria-hidden="true"
-                />
               )}
             </Link>
           );

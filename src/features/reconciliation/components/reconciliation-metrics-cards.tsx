@@ -39,7 +39,7 @@ export function ReconciliationMetricsCards({
         {/* 1. Settlement Match Rate */}
         <div className="p-5 sm:p-6 flex flex-col justify-between gap-1.5 hover:bg-muted/10 transition-colors">
           <div className="flex items-center justify-between">
-            <span className="text-[11px] font-semibold text-muted-foreground uppercase tracking-wider">
+            <span className="text-xs font-medium text-muted-foreground">
               Settlement Match Rate
             </span>
             <span className="h-2 w-2 rounded-full bg-emerald-500 animate-pulse" aria-hidden="true" />
@@ -60,7 +60,7 @@ export function ReconciliationMetricsCards({
         {/* 2. Net Capital Settled */}
         <div className="p-5 sm:p-6 flex flex-col justify-between gap-1.5 hover:bg-muted/10 transition-colors">
           <div className="flex items-center justify-between">
-            <span className="text-[11px] font-semibold text-muted-foreground uppercase tracking-wider">
+            <span className="text-xs font-medium text-muted-foreground">
               Net Capital Settled
             </span>
             <span className="font-mono text-[10px] text-muted-foreground">USD Net</span>
@@ -78,7 +78,7 @@ export function ReconciliationMetricsCards({
         {/* 3. Discrepancy Variance */}
         <div className="p-5 sm:p-6 flex flex-col justify-between gap-1.5 hover:bg-muted/10 transition-colors">
           <div className="flex items-center justify-between">
-            <span className="text-[11px] font-semibold text-rose-700 dark:text-rose-300 uppercase tracking-wider">
+            <span className="text-xs font-semibold text-rose-700 dark:text-rose-300">
               Discrepancy Variance
             </span>
             <span className="font-mono text-[10px] px-1.5 py-0.5 rounded bg-rose-500/10 text-rose-600 dark:text-rose-400 font-semibold">
@@ -98,7 +98,7 @@ export function ReconciliationMetricsCards({
         {/* 4. Audited Resolutions */}
         <div className="p-5 sm:p-6 flex flex-col justify-between gap-1.5 hover:bg-muted/10 transition-colors">
           <div className="flex items-center justify-between">
-            <span className="text-[11px] font-semibold text-muted-foreground uppercase tracking-wider">
+            <span className="text-xs font-medium text-muted-foreground">
               Audited Resolutions
             </span>
             <span className="font-mono text-[10px] text-emerald-600 dark:text-emerald-400 font-semibold">

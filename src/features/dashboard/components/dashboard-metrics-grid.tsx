@@ -17,10 +17,10 @@ export function DashboardMetricsGrid({ summary }: DashboardMetricsGridProps) {
       {/* Swiss Editorial Treasury Block */}
       <div className="rounded-2xl border border-border/80 bg-card shadow-[0_1px_3px_rgba(0,0,0,0.03),0_6px_16px_rgba(0,0,0,0.02)] overflow-hidden transition-all">
         {/* Top Hero: Primary Processed Volume & Institutional Status */}
-        <div className="p-6 sm:p-8 flex flex-col md:flex-row md:items-end justify-between gap-6 border-b border-border/60 bg-gradient-to-b from-card via-card to-muted/10">
+        <div className="p-6 sm:p-8 flex flex-col md:flex-row md:items-end justify-between gap-6 border-b border-border/70 bg-card">
           <div className="space-y-2">
             <div className="flex items-center gap-3">
-              <span className="text-[11px] font-semibold uppercase tracking-[0.14em] text-muted-foreground">
+              <span className="text-xs font-medium text-muted-foreground">
                 Total Volume
               </span>
               <span className="inline-flex items-center gap-1.5 rounded-full bg-primary/10 px-2.5 py-0.5 text-[11px] font-medium text-primary">
@@ -63,7 +63,7 @@ export function DashboardMetricsGrid({ summary }: DashboardMetricsGridProps) {
           {/* 1. Successful */}
           <div className="p-4 sm:p-5 flex flex-col justify-between gap-1.5 hover:bg-card/50 transition-colors">
             <div className="flex items-center justify-between text-muted-foreground">
-              <span className="text-[11px] font-semibold uppercase tracking-wider">Successful</span>
+              <span className="text-xs font-medium text-muted-foreground">Successful</span>
               <span className="h-1.5 w-1.5 rounded-full bg-emerald-500" aria-hidden="true" />
             </div>
             <div className="text-xl sm:text-2xl font-semibold font-mono tracking-tight text-foreground">
@@ -75,7 +75,7 @@ export function DashboardMetricsGrid({ summary }: DashboardMetricsGridProps) {
           {/* 2. Failed */}
           <div className="p-4 sm:p-5 flex flex-col justify-between gap-1.5 hover:bg-card/50 transition-colors">
             <div className="flex items-center justify-between text-muted-foreground">
-              <span className="text-[11px] font-semibold uppercase tracking-wider">Failed (Exceptions)</span>
+              <span className="text-xs font-medium text-rose-600 dark:text-rose-400">Failed (Exceptions)</span>
               <span className="h-1.5 w-1.5 rounded-full bg-rose-500" aria-hidden="true" />
             </div>
             <div className="text-xl sm:text-2xl font-semibold font-mono tracking-tight text-rose-600 dark:text-rose-400">
@@ -87,7 +87,7 @@ export function DashboardMetricsGrid({ summary }: DashboardMetricsGridProps) {
           {/* 3. Pending */}
           <div className="p-4 sm:p-5 flex flex-col justify-between gap-1.5 hover:bg-card/50 transition-colors">
             <div className="flex items-center justify-between text-muted-foreground">
-              <span className="text-[11px] font-semibold uppercase tracking-wider">Pending</span>
+              <span className="text-xs font-medium text-muted-foreground">Pending</span>
               <span className="h-1.5 w-1.5 rounded-full bg-amber-500" aria-hidden="true" />
             </div>
             <div className="text-xl sm:text-2xl font-semibold font-mono tracking-tight text-amber-600 dark:text-amber-400">
@@ -99,7 +99,7 @@ export function DashboardMetricsGrid({ summary }: DashboardMetricsGridProps) {
           {/* 4. Auth Success Rate */}
           <div className="p-4 sm:p-5 flex flex-col justify-between gap-1.5 hover:bg-card/50 transition-colors">
             <div className="flex items-center justify-between text-muted-foreground">
-              <span className="text-[11px] font-semibold uppercase tracking-wider">Auth Success Rate</span>
+              <span className="text-xs font-medium text-muted-foreground">Auth Success Rate</span>
               <Activity className="h-3 w-3 text-primary" aria-hidden="true" />
             </div>
             <div className="text-xl sm:text-2xl font-semibold font-mono tracking-tight text-foreground">
@@ -111,7 +111,7 @@ export function DashboardMetricsGrid({ summary }: DashboardMetricsGridProps) {
           {/* 5. Avg Processing Time */}
           <div className="p-4 sm:p-5 col-span-2 md:col-span-1 flex flex-col justify-between gap-1.5 hover:bg-card/50 transition-colors">
             <div className="flex items-center justify-between text-muted-foreground">
-              <span className="text-[11px] font-semibold uppercase tracking-wider">Avg Processing Time</span>
+              <span className="text-xs font-medium text-muted-foreground">Avg Processing Time</span>
               <span className="text-[10px] font-mono text-muted-foreground">p95</span>
             </div>
             <div className="text-xl sm:text-2xl font-semibold font-mono tracking-tight text-foreground">
