@@ -1,6 +1,17 @@
 import * as React from 'react';
-import { ArrowUpRight, ShieldCheck, Activity } from 'lucide-react';
+import Link from 'next/link';
+import {
+  ArrowUpRight,
+  ShieldCheck,
+  AlertOctagon,
+  Clock,
+  ExternalLink,
+  Layers,
+  ArrowRight,
+  TrendingUp,
+} from 'lucide-react';
 import { formatCurrency, formatPercentageDelta, formatRate } from '@/lib/formatters';
+import { Badge } from '@/components/ui/badge';
 import type { DashboardSummary } from '../types/dashboard.types';
 
 interface DashboardMetricsGridProps {
@@ -8,116 +19,176 @@ interface DashboardMetricsGridProps {
 }
 
 export function DashboardMetricsGrid({ summary }: DashboardMetricsGridProps) {
+  const isHealthyAuth = summary.authorizationRate >= 95;
+  const hasDiscrepancy = summary.unreconciledDiscrepancyCents > 0;
+
   return (
-    <section aria-labelledby="kpi-metrics-heading">
-      <h2 id="kpi-metrics-heading" className="sr-only">
-        Key Performance Indicators
+    <section aria-labelledby="treasury-metrics-heading" className="space-y-4">
+      <h2 id="treasury-metrics-heading" className="sr-only">
+        Key Financial Performance Indicators
       </h2>
 
-      {/* Swiss Editorial Treasury Block */}
-      <div className="rounded-2xl border border-border/80 bg-card shadow-[0_1px_3px_rgba(0,0,0,0.03),0_6px_16px_rgba(0,0,0,0.02)] overflow-hidden transition-all">
-        {/* Top Hero: Primary Processed Volume & Institutional Status */}
-        <div className="p-6 sm:p-8 flex flex-col md:flex-row md:items-end justify-between gap-6 border-b border-border/70 bg-card">
-          <div className="space-y-2">
-            <div className="flex items-center gap-3">
-              <span className="text-xs font-medium text-muted-foreground">
-                Total Volume
-              </span>
-              <span className="inline-flex items-center gap-1.5 rounded-full bg-primary/10 px-2.5 py-0.5 text-[11px] font-medium text-primary">
-                <span className="h-1.5 w-1.5 rounded-full bg-primary animate-pulse" aria-hidden="true" />
-                Live Net Clearing
-              </span>
+      {/* Primary Financial Volume & Multi-Rail Clearing Strip */}
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-4">
+        {/* Dominant Primary Metric: Net Settled Volume (7 cols on lg) */}
+        <div className="lg:col-span-7 rounded-xl border border-border/80 bg-card p-6 sm:p-7 shadow-xs flex flex-col justify-between relative overflow-hidden">
+          {/* Subtle top indicator bar */}
+          <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-primary via-emerald-500 to-primary/40" />
+
+          <div>
+            <div className="flex items-center justify-between gap-2 mb-3">
+              <div className="flex items-center gap-2">
+                <span className="text-xs font-semibold tracking-wide text-muted-foreground uppercase">
+                  Total Volume
+                </span>
+                <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full text-[10px] font-mono font-medium bg-emerald-500/10 text-emerald-700 dark:text-emerald-300 border border-emerald-500/20">
+                  <span className="h-1.5 w-1.5 rounded-full bg-emerald-500 animate-pulse" />
+                  Live Clearing
+                </span>
+              </div>
+              <span className="text-[11px] font-mono text-muted-foreground">USD Settlement</span>
             </div>
 
             <div className="flex items-baseline gap-3 flex-wrap">
-              <span className="text-3xl sm:text-4xl lg:text-5xl font-semibold tracking-tight text-foreground font-mono">
+              <span className="text-3xl sm:text-4xl lg:text-5xl font-mono font-bold tracking-tight text-foreground tabular-nums">
                 {formatCurrency(summary.totalVolumeCents, 'USD')}
               </span>
-              <span className="text-xs font-mono font-medium text-muted-foreground">USD</span>
             </div>
 
-            <div className="flex items-center gap-2 pt-1 text-xs text-muted-foreground">
-              <span className="inline-flex items-center gap-0.5 font-medium text-emerald-600 dark:text-emerald-400 font-mono bg-emerald-500/10 px-1.5 py-0.5 rounded">
+            <div className="flex items-center gap-2.5 pt-2 text-xs text-muted-foreground flex-wrap">
+              <span className="inline-flex items-center gap-0.5 font-medium text-emerald-600 dark:text-emerald-400 font-mono bg-emerald-500/10 px-2 py-0.5 rounded border border-emerald-500/20">
                 <ArrowUpRight className="h-3.5 w-3.5" aria-hidden="true" />
                 <span>{formatPercentageDelta(summary.volumeDeltaPercent)}</span>
               </span>
               <span>vs prior period</span>
-              <span className="text-border mx-1">•</span>
-              <span className="hidden sm:inline">Calculated across Stripe, Adyen & ACH rails</span>
+              <span className="text-border">•</span>
+              <span className="font-mono text-[11px] text-muted-foreground">
+                Settled Multi-Rail Clearing
+              </span>
+              <span className="text-border">•</span>
+              <span className="font-mono text-[11px] text-muted-foreground">
+                Synthetic Seed #42
+              </span>
             </div>
           </div>
 
-          {/* Institutional Integrity Stamp */}
-          <div className="hidden lg:flex flex-col items-end gap-1.5 text-right">
-            <div className="inline-flex items-center gap-1.5 rounded-lg border border-border/80 bg-muted/30 px-3 py-1.5 text-xs text-foreground">
-              <ShieldCheck className="h-3.5 w-3.5 text-primary" aria-hidden="true" />
-              <span className="font-medium">Deterministic Ledger</span>
-              <span className="font-mono text-[10px] text-muted-foreground">#42-STABLE</span>
+          {/* Quick Macro Breakdown Bar */}
+          <div className="mt-6 pt-4 border-t border-border/60 grid grid-cols-2 sm:grid-cols-3 gap-4 text-xs">
+            <div>
+              <span className="text-muted-foreground text-[11px] block">Successful</span>
+              <span className="text-sm font-mono font-semibold text-foreground">
+                {summary.successfulTransactionsCount.toLocaleString()}
+              </span>
             </div>
-            <span className="text-[11px] text-muted-foreground">Real-time settlement accuracy 99.99%</span>
+
+            <div>
+              <span className="text-muted-foreground text-[11px] block">Unreconciled Break</span>
+              <span className="text-sm font-mono font-semibold text-rose-600 dark:text-rose-400">
+                {formatCurrency(summary.unreconciledDiscrepancyCents, 'USD')}
+              </span>
+            </div>
+
+            <div className="col-span-2 sm:col-span-1">
+              <span className="text-muted-foreground text-[11px] block">Audit Integrity</span>
+              <span className="text-sm font-mono font-semibold text-emerald-600 dark:text-emerald-400">
+                Deterministic · Active
+              </span>
+            </div>
           </div>
         </div>
 
-        {/* Bottom Ledger Columns: Secondary Multi-Rail Metrics */}
-        <div className="grid grid-cols-2 md:grid-cols-5 divide-y md:divide-y-0 md:divide-x divide-border/60 bg-muted/20">
-          {/* 1. Successful */}
-          <div className="p-4 sm:p-5 flex flex-col justify-between gap-1.5 hover:bg-card/50 transition-colors">
-            <div className="flex items-center justify-between text-muted-foreground">
-              <span className="text-xs font-medium text-muted-foreground">Successful</span>
-              <span className="h-1.5 w-1.5 rounded-full bg-emerald-500" aria-hidden="true" />
-            </div>
-            <div className="text-xl sm:text-2xl font-semibold font-mono tracking-tight text-foreground">
-              {summary.successfulTransactionsCount.toLocaleString()}
-            </div>
-            <span className="text-[11px] text-muted-foreground truncate">Settled &amp; Cleared</span>
-          </div>
-
-          {/* 2. Failed */}
-          <div className="p-4 sm:p-5 flex flex-col justify-between gap-1.5 hover:bg-card/50 transition-colors">
-            <div className="flex items-center justify-between text-muted-foreground">
-              <span className="text-xs font-medium text-rose-600 dark:text-rose-400">Failed (Exceptions)</span>
-              <span className="h-1.5 w-1.5 rounded-full bg-rose-500" aria-hidden="true" />
-            </div>
-            <div className="text-xl sm:text-2xl font-semibold font-mono tracking-tight text-rose-600 dark:text-rose-400">
-              {summary.failedTransactionsCount.toLocaleString()}
-            </div>
-            <span className="text-[11px] font-medium text-rose-600 dark:text-rose-400 truncate">Requires triage</span>
-          </div>
-
-          {/* 3. Pending */}
-          <div className="p-4 sm:p-5 flex flex-col justify-between gap-1.5 hover:bg-card/50 transition-colors">
-            <div className="flex items-center justify-between text-muted-foreground">
-              <span className="text-xs font-medium text-muted-foreground">Pending</span>
-              <span className="h-1.5 w-1.5 rounded-full bg-amber-500" aria-hidden="true" />
-            </div>
-            <div className="text-xl sm:text-2xl font-semibold font-mono tracking-tight text-amber-600 dark:text-amber-400">
-              {summary.pendingTransactionsCount.toLocaleString()}
-            </div>
-            <span className="text-[11px] text-muted-foreground truncate">Awaiting gateway settlement</span>
-          </div>
-
-          {/* 4. Auth Success Rate */}
-          <div className="p-4 sm:p-5 flex flex-col justify-between gap-1.5 hover:bg-card/50 transition-colors">
-            <div className="flex items-center justify-between text-muted-foreground">
+        {/* Secondary Operational Metrics Area (5 cols on lg) */}
+        <div className="lg:col-span-5 grid grid-cols-2 gap-3 sm:gap-4">
+          {/* Tile 1: Authorization Rate */}
+          <div className="rounded-xl border border-border/80 bg-card p-4 sm:p-5 flex flex-col justify-between shadow-xs">
+            <div className="flex items-center justify-between">
               <span className="text-xs font-medium text-muted-foreground">Auth Success Rate</span>
-              <Activity className="h-3 w-3 text-primary" aria-hidden="true" />
+              <TrendingUp className="h-4 w-4 text-primary" aria-hidden="true" />
             </div>
-            <div className="text-xl sm:text-2xl font-semibold font-mono tracking-tight text-foreground">
-              {formatRate(summary.authorizationRate)}
+
+            <div className="my-2">
+              <div className="text-2xl sm:text-3xl font-mono font-bold tracking-tight text-foreground tabular-nums">
+                {formatRate(summary.authorizationRate)}
+              </div>
+              <div className="w-full bg-muted rounded-full h-1.5 mt-2 overflow-hidden">
+                <div
+                  className="bg-emerald-500 h-1.5 rounded-full transition-all duration-500"
+                  style={{ width: `${Math.min(100, Math.max(0, summary.authorizationRate))}%` }}
+                />
+              </div>
             </div>
-            <span className="text-[11px] text-emerald-600 dark:text-emerald-400 font-medium truncate">Above 95% SLA</span>
+
+            <span className="text-[11px] text-muted-foreground">
+              {isHealthyAuth ? 'Above 95% target threshold' : 'Below target SLA'}
+            </span>
           </div>
 
-          {/* 5. Avg Processing Time */}
-          <div className="p-4 sm:p-5 col-span-2 md:col-span-1 flex flex-col justify-between gap-1.5 hover:bg-card/50 transition-colors">
-            <div className="flex items-center justify-between text-muted-foreground">
+          {/* Tile 2: Failed Exceptions */}
+          <div className="rounded-xl border border-border/80 bg-card p-4 sm:p-5 flex flex-col justify-between shadow-xs">
+            <div className="flex items-center justify-between">
+              <span className="text-xs font-medium text-rose-600 dark:text-rose-400">Failed (Exceptions)</span>
+              <AlertOctagon className="h-4 w-4 text-rose-500" aria-hidden="true" />
+            </div>
+
+            <div className="my-2">
+              <div className="text-2xl sm:text-3xl font-mono font-bold tracking-tight text-rose-600 dark:text-rose-400 tabular-nums">
+                {summary.failedTransactionsCount.toLocaleString()}
+              </div>
+              <span className="text-[11px] font-medium text-rose-600/90 dark:text-rose-400/90 block mt-1">
+                Active decline queue
+              </span>
+            </div>
+
+            <Link
+              href="/transactions?status=failed"
+              className="inline-flex items-center gap-1 text-[11px] text-primary hover:underline font-medium group"
+            >
+              <span>Review Failures</span>
+              <ArrowRight className="h-3 w-3 transition-transform group-hover:translate-x-0.5" />
+            </Link>
+          </div>
+
+          {/* Tile 3: Pending In-Flight */}
+          <div className="rounded-xl border border-border/80 bg-card p-4 sm:p-5 flex flex-col justify-between shadow-xs">
+            <div className="flex items-center justify-between">
+              <span className="text-xs font-medium text-muted-foreground">Pending</span>
+              <span className="h-2 w-2 rounded-full bg-amber-500 animate-pulse" />
+            </div>
+
+            <div className="my-2">
+              <div className="text-2xl sm:text-3xl font-mono font-bold tracking-tight text-foreground tabular-nums">
+                {summary.pendingTransactionsCount.toLocaleString()}
+              </div>
+              <span className="text-[11px] text-muted-foreground block mt-1">
+                Batch in-flight
+              </span>
+            </div>
+
+            <span className="text-[11px] text-muted-foreground font-mono">
+              ACH &amp; SEPA clearing
+            </span>
+          </div>
+
+          {/* Tile 4: Average Processing Time */}
+          <div className="rounded-xl border border-border/80 bg-card p-4 sm:p-5 flex flex-col justify-between shadow-xs">
+            <div className="flex items-center justify-between">
               <span className="text-xs font-medium text-muted-foreground">Avg Processing Time</span>
-              <span className="text-[10px] font-mono text-muted-foreground">p95</span>
+              <Clock className="h-4 w-4 text-muted-foreground" aria-hidden="true" />
             </div>
-            <div className="text-xl sm:text-2xl font-semibold font-mono tracking-tight text-foreground">
-              <span>{summary.averageProcessingTimeMs}</span> <span className="text-xs font-normal text-muted-foreground font-sans">ms</span>
+
+            <div className="my-2">
+              <div className="text-2xl sm:text-3xl font-mono font-bold tracking-tight text-foreground tabular-nums flex items-baseline gap-1">
+                <span>{summary.averageProcessingTimeMs}</span>
+                <span className="text-xs font-normal text-muted-foreground">ms</span>
+              </div>
+              <span className="text-[11px] text-muted-foreground block mt-1">
+                Network latency
+              </span>
             </div>
-            <span className="text-[11px] text-muted-foreground truncate">Optimal latency (&lt;250ms)</span>
+
+            <span className="text-[11px] text-muted-foreground">
+              99th percentile: 280ms
+            </span>
           </div>
         </div>
       </div>

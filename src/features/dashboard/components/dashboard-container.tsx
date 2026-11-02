@@ -9,6 +9,8 @@ import { DashboardMetricsGrid } from './dashboard-metrics-grid';
 import { RecentTransactionsTable } from './recent-transactions-table';
 import { RecentActivityList } from './recent-activity-list';
 import { TriageIncidentSummary } from './triage-incident-summary';
+import { OperationalExceptionsPanel } from './operational-exceptions-panel';
+import { TransactionDetailDrawer } from '@/features/transactions/components/transaction-detail-drawer';
 import { DashboardSkeleton } from './dashboard-skeleton';
 import { ErrorState } from '@/components/feedback/error-state';
 import { EmptyState } from '@/components/feedback/empty-state';
@@ -61,18 +63,25 @@ const TIME_RANGES: Array<{ label: string; value: TimeRange }> = [
 
 export function DashboardContainer() {
   const [timeRange, setTimeRange] = React.useState<TimeRange>('7d');
+  const [selectedTransactionId, setSelectedTransactionId] = React.useState<string | null>(null);
   const { data, isLoading, isError, error, refetch, isFetching } = useDashboard(timeRange);
 
   return (
     <div className="space-y-6">
-      {/* Filter Toolbar / Controls */}
-      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 bg-card p-3 rounded-2xl border border-border/70 shadow-[0_1px_3px_rgba(0,0,0,0.02)]">
-        <div className="flex items-center gap-3">
-          <span className="text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">Horizon</span>
+      {/* Sleek Operational Control Header */}
+      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 border-b border-border/60 pb-3">
+        <div className="flex items-center gap-2 text-xs">
+          <span className="h-2 w-2 rounded-full bg-emerald-500 animate-pulse" />
+          <span className="font-semibold text-foreground">Multi-Rail Clearing Engine</span>
+          <span className="text-muted-foreground text-border">•</span>
+          <span className="text-muted-foreground font-mono text-[11px]">Stripe · Adyen · SVB ACH</span>
+        </div>
+
+        <div className="flex items-center gap-3 w-full sm:w-auto justify-between sm:justify-end">
           <div
             role="group"
             aria-label="Filter by time horizon"
-            className="inline-flex rounded-xl border border-border/80 bg-muted/30 p-1"
+            className="inline-flex rounded-lg border border-border/80 bg-muted/40 p-0.5 text-xs"
           >
             {TIME_RANGES.map((range) => {
               const isSelected = timeRange === range.value;
@@ -83,9 +92,9 @@ export function DashboardContainer() {
                   onClick={() => setTimeRange(range.value)}
                   aria-pressed={isSelected}
                   className={cn(
-                    'rounded-lg px-3 py-1 text-xs font-medium transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary',
+                    'rounded-md px-2.5 py-1 text-xs font-medium transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary',
                     isSelected
-                      ? 'bg-card text-foreground shadow-xs font-semibold border border-border/40'
+                      ? 'bg-card text-foreground shadow-xs font-semibold'
                       : 'text-muted-foreground hover:text-foreground'
                   )}
                 >
@@ -94,15 +103,13 @@ export function DashboardContainer() {
               );
             })}
           </div>
-        </div>
 
-        <div className="flex items-center gap-2 self-end sm:self-auto">
           <Button
             variant="outline"
             size="sm"
             onClick={() => refetch()}
             disabled={isFetching}
-            className="h-8 gap-1.5 text-xs rounded-lg border-border/80 text-muted-foreground hover:text-foreground hover:bg-muted/40"
+            className="h-7 text-xs gap-1.5 border-border/80 text-muted-foreground hover:text-foreground"
             aria-label="Refresh operational metrics"
           >
             <RefreshCw
@@ -139,24 +146,40 @@ export function DashboardContainer() {
       {/* Loaded Dashboard Content */}
       {!isLoading && !isError && data && (
         <div className="space-y-6">
-          {/* Unified Treasury Summary Strip */}
+          {/* Primary Treasury & Multi-Rail Summary Bar */}
           <DashboardMetricsGrid summary={data.summary} />
 
+          {/* Operational Exceptions Requiring Urgent Triage */}
+          <OperationalExceptionsPanel
+            summary={data.summary}
+            recentTransactions={data.recentTransactions}
+            onSelectTransaction={setSelectedTransactionId}
+          />
+
           {/* Asymmetrical Operations Desk (68% Primary Stage / 32% Triage Rail) */}
-          <div className="grid gap-6 lg:grid-cols-12 items-start">
-            {/* Primary Stage (68% - lg:col-span-8) */}
-            <div className="lg:col-span-8 space-y-6">
+          <div className="grid gap-6 lg:grid-cols-12 items-start min-w-0 w-full">
+            {/* Primary Stage (lg:col-span-8) */}
+            <div className="lg:col-span-8 space-y-6 min-w-0 w-full overflow-hidden">
               <VolumeTrendChart data={data.volumeOverTime} />
-              <RecentTransactionsTable transactions={data.recentTransactions} />
+              <RecentTransactionsTable
+                transactions={data.recentTransactions}
+                onSelectTransaction={setSelectedTransactionId}
+              />
             </div>
 
-            {/* Triage Command Rail (32% - lg:col-span-4) */}
-            <div className="lg:col-span-4 space-y-6">
-              <TriageIncidentSummary summary={data.summary} />
+            {/* Triage Command Rail (lg:col-span-4) */}
+            <div className="lg:col-span-4 space-y-6 min-w-0 w-full overflow-hidden">
               <StatusDistributionChart data={data.statusDistribution} />
+              <TriageIncidentSummary summary={data.summary} />
               <RecentActivityList activities={data.recentActivity} />
             </div>
           </div>
+
+          {/* Interactive Transaction Detail Drawer */}
+          <TransactionDetailDrawer
+            selectedId={selectedTransactionId}
+            onClose={() => setSelectedTransactionId(null)}
+          />
         </div>
       )}
     </div>

@@ -30,12 +30,12 @@ export default function DashboardLayout({
           <MobileNav />
 
           {/* Main Application Area */}
-          <div className="flex flex-1 flex-col min-w-0">
+          <div className="flex flex-1 flex-col min-w-0 overflow-x-hidden">
             <Topbar />
             <main
               id="main-content"
               role="main"
-              className="flex-1 w-full max-w-[1600px] mx-auto p-4 sm:p-6 lg:p-8"
+              className="flex-1 w-full max-w-[1600px] mx-auto p-4 sm:p-6 lg:p-8 min-w-0"
             >
               {children}
             </main>

@@ -5,10 +5,12 @@ import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/com
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { formatCurrency, formatDateTime } from '@/lib/formatters';
+import { cn } from '@/lib/utils';
 import type { SeedTransaction } from '@/lib/mock-data/seed-transactions';
 
 interface RecentTransactionsTableProps {
   transactions: SeedTransaction[];
+  onSelectTransaction?: (id: string) => void;
 }
 
 function getPaymentMethodIcon(method: string) {
@@ -39,7 +41,10 @@ function getStatusBadge(status: string) {
   }
 }
 
-export function RecentTransactionsTable({ transactions }: RecentTransactionsTableProps) {
+export function RecentTransactionsTable({
+  transactions,
+  onSelectTransaction,
+}: RecentTransactionsTableProps) {
   return (
     <Card className="flex flex-col rounded-2xl border border-border/80 bg-card shadow-[0_1px_3px_rgba(0,0,0,0.02)] overflow-hidden">
       <CardHeader className="flex flex-row items-center justify-between p-5 pb-4 border-b border-border/50">
@@ -70,7 +75,21 @@ export function RecentTransactionsTable({ transactions }: RecentTransactionsTabl
             </thead>
             <tbody className="divide-y divide-border/40 font-sans">
               {transactions.map((txn) => (
-                <tr key={txn.id} className="hover:bg-muted/40 transition-colors">
+                <tr
+                  key={txn.id}
+                  onClick={() => onSelectTransaction?.(txn.id)}
+                  tabIndex={onSelectTransaction ? 0 : undefined}
+                  onKeyDown={(e) => {
+                    if (onSelectTransaction && (e.key === 'Enter' || e.key === ' ')) {
+                      e.preventDefault();
+                      onSelectTransaction(txn.id);
+                    }
+                  }}
+                  className={cn(
+                    'hover:bg-muted/40 transition-colors',
+                    onSelectTransaction && 'cursor-pointer focus-visible:outline-none focus-visible:bg-muted/60'
+                  )}
+                >
                   <td className="px-4 py-3 font-mono font-medium text-foreground">
                     <div className="flex items-center gap-2">
                       <span className="text-muted-foreground">{getPaymentMethodIcon(txn.paymentMethod)}</span>

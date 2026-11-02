@@ -71,13 +71,13 @@ export function StatusDistributionChart({ data }: StatusDistributionChartProps) 
   };
 
   return (
-    <Card className="flex flex-col rounded-2xl border border-border/80 bg-card shadow-[0_1px_3px_rgba(0,0,0,0.02)] overflow-hidden">
+    <Card className="flex flex-col rounded-2xl border border-border/80 bg-card shadow-[0_1px_3px_rgba(0,0,0,0.02)] overflow-hidden w-full min-w-0 max-w-full">
       <CardHeader className="p-5 pb-3 border-b border-border/50">
         <CardTitle className="text-sm font-semibold tracking-tight text-foreground">Payment Status Distribution</CardTitle>
         <CardDescription className="text-xs text-muted-foreground">Breakdown of all processed transactions by terminal status.</CardDescription>
       </CardHeader>
-      <CardContent className="flex-1 p-5 pt-4">
-        <div className="h-[280px] w-full" aria-label="Payment Status Donut Chart">
+      <CardContent className="flex-1 p-5 pt-4 min-w-0 overflow-hidden">
+        <div className="h-[280px] w-full min-w-0 max-w-full" aria-label="Payment Status Donut Chart">
           <ResponsiveContainer width="100%" height="100%">
             <PieChart>
               <Pie
