@@ -1,6 +1,7 @@
 'use client';
 
 import * as React from 'react';
+import Link from 'next/link';
 import {
   Layers,
   Building,
@@ -14,6 +15,7 @@ import {
   Copy,
   Check,
   Lock,
+  ExternalLink,
 } from 'lucide-react';
 import { usePermission } from '@/features/auth/hooks/use-permission';
 import { Drawer } from '@/components/ui/drawer';
@@ -173,6 +175,15 @@ export function DiscrepancyDiffViewer({
                       </button>
                     )}
                   </div>
+                  {record.internalTransactionId && (
+                    <Link
+                      href={`/transactions?q=${record.internalTransactionId}`}
+                      className="inline-flex items-center gap-1 text-[11px] text-primary hover:underline font-sans mt-1"
+                    >
+                      <ExternalLink className="h-3 w-3" />
+                      <span>Inspect in Core Transactions</span>
+                    </Link>
+                  )}
                 </div>
 
                 <div>

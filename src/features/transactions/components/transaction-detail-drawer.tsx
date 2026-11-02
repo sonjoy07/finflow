@@ -1,6 +1,7 @@
 'use client';
 
 import * as React from 'react';
+import Link from 'next/link';
 import {
   CreditCard,
   Landmark,
@@ -14,6 +15,8 @@ import {
   ArrowUpRight,
   Info,
   Lock,
+  ExternalLink,
+  ShieldAlert,
 } from 'lucide-react';
 import { usePermission } from '@/features/auth/hooks/use-permission';
 import { Drawer } from '@/components/ui/drawer';
@@ -23,6 +26,7 @@ import { Skeleton } from '@/components/ui/skeleton';
 import { formatCurrency, formatDateTime } from '@/lib/formatters';
 import { useTransactionDetail } from '../hooks/use-transaction-detail';
 import { RetryTransactionModal } from './retry-transaction-modal';
+import { classifyFailureReason } from '../lib/failure-classification';
 import type { TransactionDetail } from '../types/transaction.types';
 
 interface TransactionDetailDrawerProps {
@@ -49,6 +53,8 @@ export function TransactionDetailDrawer({
 
   const { can } = usePermission();
   const canRetry = can('TRANSACTION_RETRY');
+
+  const failurePolicy = transaction?.status === 'failed' ? classifyFailureReason(transaction.failureReason) : null;
 
   const isEligibleForRetry =
     Boolean(transaction) &&
@@ -121,14 +127,42 @@ export function TransactionDetailDrawer({
 
               {/* Decline Reason if Failed */}
               {transaction.failureReason && (
-                <div className="rounded-md bg-rose-500/10 border border-rose-500/20 p-2.5 flex items-start gap-2 text-rose-600 dark:text-rose-400">
-                  <AlertTriangle className="h-4 w-4 shrink-0 mt-0.5" aria-hidden="true" />
-                  <div>
-                    <span className="font-semibold block uppercase text-[10px]">Decline Reason</span>
-                    <span className="font-mono text-[11px]">{transaction.failureReason}</span>
+                <div className="rounded-md bg-rose-500/10 border border-rose-500/20 p-2.5 flex flex-col gap-2 text-rose-600 dark:text-rose-400">
+                  <div className="flex items-start gap-2">
+                    <AlertTriangle className="h-4 w-4 shrink-0 mt-0.5" aria-hidden="true" />
+                    <div>
+                      <span className="font-semibold block uppercase text-[10px]">Decline Reason</span>
+                      <span className="font-mono text-[11px]">{transaction.failureReason}</span>
+                    </div>
                   </div>
+
+                  {failurePolicy && (
+                    <div className="pt-2 border-t border-rose-500/20 text-[11px] space-y-1">
+                      <div className="flex items-center justify-between">
+                        <span className="font-medium text-muted-foreground">Network Rule:</span>
+                        <Badge variant="outline" className="text-[10px] font-mono border-rose-500/30 text-rose-600 dark:text-rose-400">
+                          {failurePolicy.visaCategory}
+                        </Badge>
+                      </div>
+                      <p className="text-[10px] text-muted-foreground leading-relaxed mt-0.5">
+                        {failurePolicy.rationale}
+                      </p>
+                    </div>
+                  )}
                 </div>
               )}
+
+              {/* Cross-Module Operational Links */}
+              <div className="flex items-center justify-between text-xs pt-1 border-t border-border/40">
+                <span className="text-muted-foreground text-[11px]">Settlement Parity:</span>
+                <Link
+                  href={`/reconciliation?search=${transaction.referenceId}`}
+                  className="inline-flex items-center gap-1 font-mono text-[11px] text-primary hover:underline font-medium"
+                >
+                  <ExternalLink className="h-3 w-3" />
+                  <span>Audit in Clearing Ledger</span>
+                </Link>
+              </div>
 
               {/* Retry Workflow Section */}
               <div className="pt-2 border-t border-border/40">

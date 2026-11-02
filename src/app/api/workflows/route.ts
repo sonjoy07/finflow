@@ -27,8 +27,11 @@ const createWorkflowSchema = z.object({
   status: z.enum(['active', 'paused']).default('active'),
 });
 
-export async function GET() {
+export async function GET(request: NextRequest) {
   try {
+    const { errorResponse } = await authenticateRequest(request, 'WORKFLOW_VIEW');
+    if (errorResponse) return errorResponse;
+
     if (env.MOCK_API_DELAY_MS > 0) {
       await new Promise((resolve) => setTimeout(resolve, env.MOCK_API_DELAY_MS));
     }

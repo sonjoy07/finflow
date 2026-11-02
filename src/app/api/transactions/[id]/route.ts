@@ -1,13 +1,17 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { authenticateRequest } from '@/features/auth/lib/server-auth';
 import { mockRepository } from '@/lib/mock-data/mock-repository';
 import type { ApiSuccessResponse, ApiErrorResponse } from '@/types';
 import { env } from '@/lib/env';
 
 export async function GET(
-  _request: NextRequest,
+  request: NextRequest,
   { params }: { params: { id: string } }
 ) {
   try {
+    const { errorResponse } = await authenticateRequest(request, 'TRANSACTION_VIEW');
+    if (errorResponse) return errorResponse;
+
     const { id } = params;
 
     if (env.MOCK_API_DELAY_MS > 0) {

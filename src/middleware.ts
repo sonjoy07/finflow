@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 import { verifySession, SESSION_COOKIE_NAME } from '@/features/auth/lib/session';
+import { hasPermission, getRequiredPermissionForPath } from '@/features/auth/lib/permissions';
 
 // Protected path prefixes
 const PROTECTED_PREFIXES = [
@@ -10,6 +11,7 @@ const PROTECTED_PREFIXES = [
   '/workflows',
   '/activity',
   '/design-system',
+  '/forbidden',
 ];
 
 export async function middleware(request: NextRequest) {
@@ -34,7 +36,7 @@ export async function middleware(request: NextRequest) {
     }
   }
 
-  // 2. If user is accessing a protected page -> require valid session
+  // 2. If user is accessing a protected page -> require valid session & check role permissions
   if (isProtectedPath) {
     if (!token) {
       const loginUrl = new URL('/login', request.url);
@@ -45,7 +47,18 @@ export async function middleware(request: NextRequest) {
     }
 
     try {
-      await verifySession(token);
+      const session = await verifySession(token);
+
+      // Check granular route permissions (RBAC)
+      const requiredPermission = getRequiredPermissionForPath(pathname);
+      if (requiredPermission && !hasPermission(session.role, requiredPermission)) {
+        const forbiddenUrl = new URL('/forbidden', request.url);
+        forbiddenUrl.searchParams.set('required', requiredPermission);
+        forbiddenUrl.searchParams.set('role', session.role);
+        forbiddenUrl.searchParams.set('from', pathname);
+        return NextResponse.redirect(forbiddenUrl);
+      }
+
       return NextResponse.next();
     } catch (err) {
       const isExpired = err instanceof Error && err.message === 'EXPIRED_SESSION';

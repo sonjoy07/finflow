@@ -22,6 +22,7 @@ import { Switch } from '@/components/ui/switch';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/components/ui/card';
 import { cn } from '@/lib/utils';
 import { formatRelativeTime } from '@/lib/formatters';
+import { usePermission } from '@/features/auth/hooks/use-permission';
 import type { Workflow, WorkflowTriggerType } from '../types/workflow.types';
 import { TRIGGER_OPTIONS } from '../types/workflow.types';
 
@@ -46,6 +47,10 @@ export function WorkflowList({
   onViewExecutions,
   simulatingWorkflowId,
 }: WorkflowListProps) {
+  const { can } = usePermission();
+  const canWrite = can('WORKFLOW_WRITE');
+  const canSimulate = can('WORKFLOW_SIMULATE');
+
   const [search, setSearch] = React.useState('');
   const [triggerFilter, setTriggerFilter] = React.useState<string>('all');
   const [statusFilter, setStatusFilter] = React.useState<'all' | 'active' | 'paused'>('all');
@@ -196,8 +201,9 @@ export function WorkflowList({
                       </span>
                       <Switch
                         checked={workflow.status === 'active'}
+                        disabled={!canWrite}
                         onCheckedChange={() => onToggleStatus(workflow.id, workflow.status)}
-                        label={`Toggle ${workflow.name} active status`}
+                        label={canWrite ? `Toggle ${workflow.name} active status` : 'Requires WORKFLOW_WRITE permission'}
                       />
                     </div>
                   </div>
@@ -272,8 +278,14 @@ export function WorkflowList({
                         variant="outline"
                         size="sm"
                         onClick={() => onSimulateRun(workflow.id)}
-                        disabled={isSimulating}
-                        className="h-8 gap-1.5 text-xs text-primary hover:text-primary hover:bg-primary/10 border-primary/30"
+                        disabled={isSimulating || !canSimulate}
+                        title={!canSimulate ? 'Requires WORKFLOW_SIMULATE permission' : undefined}
+                        className={cn(
+                          'h-8 gap-1.5 text-xs',
+                          canSimulate
+                            ? 'text-primary hover:text-primary hover:bg-primary/10 border-primary/30'
+                            : 'opacity-50 cursor-not-allowed'
+                        )}
                       >
                         <Play className="h-3.5 w-3.5 fill-current" />
                         {isSimulating ? 'Simulating...' : 'Simulate Run'}
@@ -294,7 +306,14 @@ export function WorkflowList({
                         variant="ghost"
                         size="sm"
                         onClick={() => onEdit(workflow)}
-                        className="h-8 w-8 p-0 text-muted-foreground hover:text-foreground"
+                        disabled={!canWrite}
+                        title={!canWrite ? 'Requires WORKFLOW_WRITE permission' : undefined}
+                        className={cn(
+                          'h-8 w-8 p-0',
+                          canWrite
+                            ? 'text-muted-foreground hover:text-foreground'
+                            : 'opacity-40 cursor-not-allowed'
+                        )}
                         aria-label={`Edit ${workflow.name}`}
                       >
                         <Edit className="h-3.5 w-3.5" />
@@ -305,7 +324,14 @@ export function WorkflowList({
                         variant="ghost"
                         size="sm"
                         onClick={() => onDelete(workflow.id)}
-                        className="h-8 w-8 p-0 text-muted-foreground hover:text-destructive"
+                        disabled={!canWrite}
+                        title={!canWrite ? 'Requires WORKFLOW_WRITE permission' : undefined}
+                        className={cn(
+                          'h-8 w-8 p-0',
+                          canWrite
+                            ? 'text-muted-foreground hover:text-destructive'
+                            : 'opacity-40 cursor-not-allowed'
+                        )}
                         aria-label={`Delete ${workflow.name}`}
                       >
                         <Trash2 className="h-3.5 w-3.5" />

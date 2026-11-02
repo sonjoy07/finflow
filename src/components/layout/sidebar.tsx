@@ -16,6 +16,8 @@ import {
   UserCheck,
 } from 'lucide-react';
 import { useUIStore } from '@/stores/ui-store';
+import { usePermission } from '@/features/auth/hooks/use-permission';
+import type { Permission } from '@/features/auth/types/auth.types';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Tooltip } from '@/components/ui/tooltip';
@@ -26,20 +28,27 @@ interface NavItem {
   href: string;
   icon: React.ElementType;
   badge?: string;
+  permission?: Permission;
 }
 
 const navItems: NavItem[] = [
   { label: 'Dashboard', href: '/dashboard', icon: LayoutDashboard },
-  { label: 'Transactions', href: '/transactions', icon: ArrowLeftRight, badge: 'Live' },
-  { label: 'Reconciliation', href: '/reconciliation', icon: Scale },
-  { label: 'Workflows', href: '/workflows', icon: GitBranch },
-  { label: 'Activity Logs', href: '/activity', icon: ShieldCheck },
+  { label: 'Transactions', href: '/transactions', icon: ArrowLeftRight, badge: 'Live', permission: 'TRANSACTION_VIEW' },
+  { label: 'Reconciliation', href: '/reconciliation', icon: Scale, permission: 'RECONCILIATION_VIEW' },
+  { label: 'Workflows', href: '/workflows', icon: GitBranch, permission: 'WORKFLOW_VIEW' },
+  { label: 'Activity Logs', href: '/activity', icon: ShieldCheck, permission: 'ACTIVITY_VIEW' },
   { label: 'Design System', href: '/design-system', icon: Palette },
 ];
 
 export function Sidebar() {
   const pathname = usePathname();
   const { isSidebarCollapsed, toggleSidebar } = useUIStore();
+  const { can } = usePermission();
+
+  const visibleNavItems = navItems.filter((item) => {
+    if (!item.permission) return true;
+    return can(item.permission);
+  });
 
   return (
     <aside
@@ -80,7 +89,7 @@ export function Sidebar() {
           </div>
         )}
 
-        {navItems.map((item) => {
+        {visibleNavItems.map((item) => {
           const isActive = pathname === item.href || pathname?.startsWith(item.href + '/');
           const Icon = item.icon;
 

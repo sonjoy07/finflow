@@ -4,6 +4,24 @@ import userEvent from '@testing-library/user-event';
 import { WorkflowList } from './workflow-list';
 import type { Workflow } from '../types/workflow.types';
 
+let mockCanWrite = true;
+let mockCanSimulate = true;
+
+vi.mock('@/features/auth/hooks/use-permission', () => ({
+  usePermission: () => ({
+    can: (perm: string) => {
+      if (perm === 'WORKFLOW_WRITE') return mockCanWrite;
+      if (perm === 'WORKFLOW_SIMULATE') return mockCanSimulate;
+      return true;
+    },
+    role: mockCanWrite ? 'admin' : 'analyst',
+    isAdmin: mockCanWrite,
+    isOperationsLead: mockCanWrite,
+    isAnalyst: !mockCanWrite,
+    isAuditor: !mockCanWrite,
+  }),
+}));
+
 describe('WorkflowList', () => {
   const mockWorkflows: Workflow[] = [
     {
@@ -42,6 +60,8 @@ describe('WorkflowList', () => {
 
   beforeEach(() => {
     vi.clearAllMocks();
+    mockCanWrite = true;
+    mockCanSimulate = true;
   });
 
   it('renders all workflow cards with their metadata', () => {
@@ -140,5 +160,45 @@ describe('WorkflowList', () => {
 
     expect(screen.queryByText('Smart Retry Gateway Timeouts')).not.toBeInTheDocument();
     expect(screen.getByText('High Discrepancy Escalation')).toBeInTheDocument();
+  });
+
+  it('disables edit, delete, and status toggle when user lacks WORKFLOW_WRITE permission', () => {
+    mockCanWrite = false;
+    render(
+      <WorkflowList
+        workflows={mockWorkflows}
+        onEdit={onEditMock}
+        onDelete={onDeleteMock}
+        onToggleStatus={onToggleStatusMock}
+        onSimulateRun={onSimulateRunMock}
+        onViewExecutions={onViewExecutionsMock}
+      />
+    );
+
+    const editBtn = screen.getByRole('button', { name: /Edit Smart Retry Gateway Timeouts/i });
+    expect(editBtn).toBeDisabled();
+
+    const deleteBtn = screen.getByRole('button', { name: /Delete Smart Retry Gateway Timeouts/i });
+    expect(deleteBtn).toBeDisabled();
+
+    const switches = screen.getAllByRole('switch');
+    expect(switches[0]).toBeDisabled();
+  });
+
+  it('disables simulate run button when user lacks WORKFLOW_SIMULATE permission', () => {
+    mockCanSimulate = false;
+    render(
+      <WorkflowList
+        workflows={mockWorkflows}
+        onEdit={onEditMock}
+        onDelete={onDeleteMock}
+        onToggleStatus={onToggleStatusMock}
+        onSimulateRun={onSimulateRunMock}
+        onViewExecutions={onViewExecutionsMock}
+      />
+    );
+
+    const simulateBtns = screen.getAllByRole('button', { name: /Simulate Run/i });
+    expect(simulateBtns[0]).toBeDisabled();
   });
 });

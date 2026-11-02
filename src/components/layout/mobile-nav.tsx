@@ -13,22 +13,38 @@ import {
   Activity,
 } from 'lucide-react';
 import { useUIStore } from '@/stores/ui-store';
+import { usePermission } from '@/features/auth/hooks/use-permission';
+import type { Permission } from '@/features/auth/types/auth.types';
 import { Drawer } from '@/components/ui/drawer';
 import { Badge } from '@/components/ui/badge';
 import { cn } from '@/lib/utils';
 
-const navItems = [
+interface NavItem {
+  label: string;
+  href: string;
+  icon: React.ElementType;
+  badge?: string;
+  permission?: Permission;
+}
+
+const navItems: NavItem[] = [
   { label: 'Dashboard', href: '/dashboard', icon: LayoutDashboard },
-  { label: 'Transactions', href: '/transactions', icon: ArrowLeftRight, badge: 'Live' },
-  { label: 'Reconciliation', href: '/reconciliation', icon: Scale },
-  { label: 'Workflows', href: '/workflows', icon: GitBranch },
-  { label: 'Activity Logs', href: '/activity', icon: ShieldCheck },
+  { label: 'Transactions', href: '/transactions', icon: ArrowLeftRight, badge: 'Live', permission: 'TRANSACTION_VIEW' },
+  { label: 'Reconciliation', href: '/reconciliation', icon: Scale, permission: 'RECONCILIATION_VIEW' },
+  { label: 'Workflows', href: '/workflows', icon: GitBranch, permission: 'WORKFLOW_VIEW' },
+  { label: 'Activity Logs', href: '/activity', icon: ShieldCheck, permission: 'ACTIVITY_VIEW' },
   { label: 'Design System', href: '/design-system', icon: Palette },
 ];
 
 export function MobileNav() {
   const pathname = usePathname();
   const { isMobileNavOpen, setMobileNavOpen } = useUIStore();
+  const { can } = usePermission();
+
+  const visibleNavItems = navItems.filter((item) => {
+    if (!item.permission) return true;
+    return can(item.permission);
+  });
 
   return (
     <Drawer
@@ -40,7 +56,7 @@ export function MobileNav() {
       className="sm:w-[280px]"
     >
       <nav role="navigation" className="space-y-1.5 py-2">
-        {navItems.map((item) => {
+        {visibleNavItems.map((item) => {
           const isActive = pathname === item.href || pathname?.startsWith(item.href + '/');
           const Icon = item.icon;
 

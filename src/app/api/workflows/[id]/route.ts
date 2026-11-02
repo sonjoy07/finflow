@@ -14,10 +14,13 @@ const updateSchema = z.object({
 });
 
 export async function GET(
-  _request: NextRequest,
+  request: NextRequest,
   { params }: { params: { id: string } }
 ) {
   try {
+    const { errorResponse } = await authenticateRequest(request, 'WORKFLOW_VIEW');
+    if (errorResponse) return errorResponse;
+
     const { id } = params;
 
     if (env.MOCK_API_DELAY_MS > 0) {

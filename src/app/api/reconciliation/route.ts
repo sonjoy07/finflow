@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { z } from 'zod';
+import { authenticateRequest } from '@/features/auth/lib/server-auth';
 import { mockRepository } from '@/lib/mock-data/mock-repository';
 import type { ApiSuccessResponse, ApiErrorResponse } from '@/types';
 import { env } from '@/lib/env';
@@ -26,6 +27,9 @@ const querySchema = z.object({
 
 export async function GET(request: NextRequest) {
   try {
+    const { errorResponse } = await authenticateRequest(request, 'RECONCILIATION_VIEW');
+    if (errorResponse) return errorResponse;
+
     const { searchParams } = new URL(request.url);
     const parsed = querySchema.safeParse(Object.fromEntries(searchParams.entries()));
 
